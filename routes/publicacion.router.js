@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 
 const PublicacionService = require('../services/publicacion.service');
 const validatorHandler = require('../middlewares/validator.handler');
@@ -8,6 +9,7 @@ const router = express.Router();
 const service = new PublicacionService();
 
 router.get('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(queryPublicacionSchema, 'query'),
   async (req, res, next) => {
     try {
@@ -24,6 +26,7 @@ router.get('/filter', (req, res) => {
 });
 
 router.get('/:id_publicacion',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getPublicacionSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -37,6 +40,7 @@ router.get('/:id_publicacion',
 );
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(createPublicacionSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -50,6 +54,7 @@ router.post('/',
 );
 
 router.patch('/:id_publicacion',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getPublicacionSchema, 'params'),
   validatorHandler(updatePublicacionSchema, 'body'),
   async (req, res, next) => {
@@ -65,6 +70,7 @@ router.patch('/:id_publicacion',
 );
 
 router.delete('/:id_publicacion',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getPublicacionSchema, 'params'),
   async (req, res, next) => {
     try {

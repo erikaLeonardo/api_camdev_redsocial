@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+
 const TipoPrivacidadService = require('../services/tipo_privacidad.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const { createTipoPrivacidadSchema, updateTipoPrivacidadSchema, getTipoPrivacidadSchema } = require('../schemas/tipo_privacidad.schema');
 
 const service = new TipoPrivacidadService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  passport.authenticate('jwt', {session: false}),
+  async (req, res, next) => {
   try {
     const privacidad = await service.find();
     res.json(privacidad);
@@ -16,6 +20,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id_tipo_privacidad',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getTipoPrivacidadSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -29,6 +34,7 @@ router.get('/:id_tipo_privacidad',
 );
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(createTipoPrivacidadSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -42,6 +48,7 @@ router.post('/',
 );
 
 router.patch('/:id_tipo_privacidad',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getTipoPrivacidadSchema, 'params'),
   validatorHandler(updateTipoPrivacidadSchema, 'body'),
   async (req, res, next) => {
@@ -57,6 +64,7 @@ router.patch('/:id_tipo_privacidad',
 );
 
 router.delete('/:id_tipo_privacidad',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getTipoPrivacidadSchema, 'params'),
   async (req, res, next) => {
     try {

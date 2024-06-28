@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const AmigosService = require('./../services/amigos.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createAmigoSchema, updateAmigoSchema, getAmigoSchema, getAmigo1Schema, getAmigoDetail } = require('./../schemas/amigo.schema');
@@ -7,7 +8,9 @@ const router = express.Router();
 const service = new AmigosService();
 
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  passport.authenticate('jwt', {session: false}),
+  async (req, res, next) => {
   try {
     const get_amigo = await service.find();
     res.json(get_amigo);
@@ -17,6 +20,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id_amistad',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getAmigoSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -29,6 +33,7 @@ router.get('/:id_amistad',
   })
 
 router.get('/amistad/:id_amigo1',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getAmigo1Schema, 'params'),
   async (req, res, next) => {
     try {
@@ -41,6 +46,7 @@ router.get('/amistad/:id_amigo1',
   });
 
 router.get('/detalle_amistad/:id_amigo1/:id_amigo2',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getAmigoDetail, 'params'),
   async (req, res, next) => {
     try {
@@ -52,7 +58,9 @@ router.get('/detalle_amistad/:id_amigo1/:id_amigo2',
     }
   });
 
-router.post('/', validatorHandler(createAmigoSchema, 'body'),
+router.post('/',
+  passport.authenticate('jwt', {session: false}),
+  validatorHandler(createAmigoSchema, 'body'),
   async (req, res) => {
     const body = req.body;
     const nuevaAmistad = await service.create(body);
@@ -61,7 +69,9 @@ router.post('/', validatorHandler(createAmigoSchema, 'body'),
 
 
 //Borrar registro de reaccion
-router.delete('/:id_amistad', async (req, res) => {
+router.delete('/:id_amistad',
+  passport.authenticate('jwt', {session: false}),
+  async (req, res) => {
   const { id_amistad } = req.params;
   const respuesta = await service.delete(id_amistad);
   res.json({ message: "Registro eliminado exitosamente", respuesta });

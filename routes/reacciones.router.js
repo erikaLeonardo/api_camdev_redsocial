@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const ReaccionesService = require('./../services/reacciones.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createReaccionSchema, updateReaccionSchema, getReaccionSchema, getCountPublicaciones,
@@ -9,7 +10,9 @@ const router = express.Router();
 const service = new ReaccionesService();
 
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  passport.authenticate('jwt', {session: false}),
+  async (req, res, next) => {
   try {
     const get_reacciones = await service.find();
     res.json(get_reacciones);
@@ -20,6 +23,7 @@ router.get('/', async (req, res, next) => {
 
 //se usa para ver que usuarios reaccionaron a una publicación
 router.get('/reacciones_detail/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(queryReaccionByUserSchema, 'query'),
   async (req, res, next) => {
     try {
@@ -32,6 +36,7 @@ router.get('/reacciones_detail/',
 
 
 router.get('/:id_reaccion',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getReaccionSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -45,6 +50,7 @@ router.get('/:id_reaccion',
 
 //para recuperar el número total de reacciones por publicación
 router.get('/reacciones_publicacion/:id_publicacion',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getCountPublicaciones, 'params'),
   async (req, res, next) => {
     try {
@@ -56,7 +62,9 @@ router.get('/reacciones_publicacion/:id_publicacion',
   })
 
 //borrar registro de reaccion
-router.delete('/:id_reaccion', async (req, res) => {
+router.delete('/:id_reaccion',
+  passport.authenticate('jwt', {session: false}),
+  async (req, res) => {
   const { id_reaccion } = req.params;
   const respuesta = await service.delete(id_reaccion);
   res.json({ message: "Registro eliminado exitosamente", respuesta });

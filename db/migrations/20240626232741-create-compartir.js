@@ -1,6 +1,3 @@
-
-
-
 'use strict';
 
 const { CompartirSchema, COMPARTIR_TABLE } = require('./../models/compartir.model');

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors'); // Importa el paquete cors
 const routerApi = require('./routes');
+const { checkApikey } = require('./middlewares/auth.handler');
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
@@ -10,11 +11,17 @@ const port = 3000;
 // Configuración básica de CORS
 app.use(cors());
 
+require('./utils/auth');
+
 // x
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('API CAMDEV V1');
+});
+
+app.get('/nueva-ruta', checkApikey, (req, res) => {
+  res.send('Hola, soy una nueva ruta');
 });
 
 routerApi(app);

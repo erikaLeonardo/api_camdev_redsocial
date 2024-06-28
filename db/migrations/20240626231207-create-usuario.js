@@ -1,5 +1,3 @@
-
-
 'use strict';
 
 const { UsuarioSchema, USUARIO_TABLE } = require('./../models/usuario.model');

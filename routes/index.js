@@ -9,6 +9,7 @@ const usuarioRouter = require('./usuario.router');
 const publicacionRouter = require('./publicacion.router');
 const tipoPrivacidadRouter = require('./tipo_privacidad.router');
 const compartirRouter = require('./compartidos.router');
+const authRouter = require('./auth.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -22,6 +23,7 @@ function routerApi(app) {
   router.use('/publicaciones', publicacionRouter);
   router.use('/tipoprivacidad', tipoPrivacidadRouter);
   router.use('/compartidos', compartirRouter);
+  router.use('/auth', authRouter);
 }
 
 module.exports = routerApi;
